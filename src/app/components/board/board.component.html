@@ -1,0 +1,36 @@
+<div>
+  <form novalidate #f="ngForm" (ngSubmit)="onSubmit()" *ngIf="!(isBoardActive$ | async) && !winner">
+    <input name="player1" type="text" placeholder="Player 1" ngModel />
+    <input name="player2" type="text" placeholder="Player 2" ngModel />
+    <button type="submit">Submit</button>
+  </form>
+  <div style="margin: 1em 0" *ngIf="isBoardActive$ | async">
+    <span>{{ player1.name }}: {{ player1.symbol }}</span>
+    <span style="margin-left: 1em"
+      >{{ player2.name }}: {{ player2.symbol }}</span
+    >
+  </div>
+
+  <div *ngIf="(isBoardActive$ | async) && !winner">
+    <h3>Now Playing: {{ currentPlayer.name }}</h3>
+  </div>
+
+  <div *ngIf="winner" style="margin: 1em 0;">
+    <h3>Winner: {{ winner }}</h3>
+  </div>
+
+  <div *ngIf="!(isBoardActive$ | async) && winner">
+    <button (click)="restart()">Restart</button>
+  </div>
+
+  <div class="grid-container" *ngIf="currentPlayer && (isBoardActive$ | async)">
+    <button
+      [disabled]="!(isBoardActive$ | async)"
+      class="grid-item"
+      *ngFor="let cell of board$ | async; let i = index"
+      (click)="onClickCell(i)"
+    >
+      {{ cell }}
+    </button>
+  </div>
+</div>
